@@ -13,10 +13,17 @@ class Service_model(models.Model):
     def __str__(self):
         return f'{self.service_name} -{self.fee}'
     
+
+
+class ResidentServiceAvail(models.Model):
+    resident_id = models.ForeignKey(Residents_model,on_delete=models.CASCADE)
+    service_avail = models.ForeignKey(Service_model,on_delete=models.CASCADE)
+
+
 class Permit_mode(models.Model):
     permit_id = models.AutoField(primary_key=True)
     resident_id = models.ForeignKey(Residents_model,on_delete=models.CASCADE)
-    service_id = models.ForeignObjectRel(Service_model,on_delete=models.CASCADE)
+    service_id = models.ForeignKey(Service_model,on_delete=models.CASCADE)
     application_date = models.DateField()
     status = models.CharField(
         max_length=20,

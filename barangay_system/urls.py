@@ -8,6 +8,8 @@ from django.conf import settings
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('',include('function.resident_function.urls')),
+    path('',include('function.services_function.urls')),
+    path('',include('function.dashboard_function.urls')),
     path('',include('function.complaints_function.urls'))
 ]
 

@@ -1,0 +1,102 @@
+from django.db import models
+
+class Announcement(models.Model):
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    published_date = models.DateField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
+
+
+class Community_model(models.Model):
+    announcement_id = models.AutoField(primary_key=True)# auto increment id
+    title = models.CharField(max_length=50)
+    content = models.TextField(max_length=200)
+    annoucement_date = models.DateField()
+    expiry_date = models.DateField()
+
+    class Meta:
+        db_table = 'Community_table'
+
+
+
+class Residents_model(models.Model):
+    resident_id = models.CharField(max_length=15,unique=True)
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    birth_date = models.DateField()
+    address = models.CharField(max_length=100)
+    contact_number = models.CharField(max_length=12)
+    house_id = models.CharField(max_length=12)
+    gender = models.CharField(max_length=12)
+
+    class Meta:
+        db_table = 'resident_table'
+
+    def __str__(self):
+        return f"{self.resident_id} - {self.first_name} - {self.last_name}"
+
+
+# Create your models here.
+class Incident_models(models.Model):
+    incident_id = models.AutoField(primary_key=True)
+    resident_id = models.ForeignKey(Residents_model,on_delete=models.CASCADE)
+    description = models.TextField(max_length=300)
+    incident_date = models.DateField()
+    status = models.CharField(
+        max_length=20,
+        choices=[('Pending','pending'),('Approve','Approve'),('Rejected','rejected')],
+        default="Pending",
+    )
+    
+    class Meta:
+        db_table = 'permits_table'
+
+
+class Complaints_model(models.Model):
+    complaint_id = models.AutoField(primary_key=True)
+    resident = models.ForeignKey(Residents_model,on_delete=models.CASCADE)
+    complaint_date = models.DateField()
+    description = models.TextField()
+    status = models.CharField(
+        max_length=20,
+        choices=[('Pending','pending'),('In Progress','In Progress'),('Resolved','resolved')],
+        default="Pending",
+    )
+
+    class Meta:
+        db_table = 'complaints_table'
+
+
+
+    def __str__(self):
+        return f"Complaint {self.complaint_id} - {self.status}"
+    
+
+class Service_model(models.Model):
+    service_id = models.AutoField(primary_key=True)# auto increment id
+    service_name = models.CharField(max_length=50)
+    description = models.TextField(max_length=150)
+    fee = models.DecimalField(max_digits=6,decimal_places=2)
+
+    class Meta:
+        db_table = 'service_table'
+
+    def __str__(self):
+        return f'{self.service_name} -{self.fee}'
+    
+class Permit_mode(models.Model):
+    permit_id = models.AutoField(primary_key=True)
+    resident_id = models.ForeignKey(Residents_model,on_delete=models.CASCADE)
+    service_id = models.ForeignKey(Service_model,on_delete=models.CASCADE)
+    application_date = models.DateField()
+    status = models.CharField(
+        max_length=20,
+        choices=[('Pending','pending'),('Approve','Approve'),('Rejected','rejected')],
+        default="Pending",
+    )
+    
+    class Meta:
+        db_table = 'permits_table'
+
+    def __str__(self):
+        return f"Permit {self.permit_id} - {self.status}"
