@@ -4,7 +4,8 @@ from .models import Residents_model
 from django.urls import reverse_lazy
 # Create your views here.
 from django.views.generic import View
-
+from django.core.paginator import Paginator
+from django.shortcuts import render
 
 #resident 
 class ResidentForm(forms.ModelForm):
@@ -27,12 +28,19 @@ class ResidentCreateView(View):
     template_name = 'resident_list.html'
     success_url = reverse_lazy('resident_list')
 
+    
+
     def get(self, request):
         form = self.form_class()
         resident_list = Residents_model.objects.all()
+        paginator = Paginator(resident_list,5)
+        
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         return render(request, self.template_name, {
             'form': form,
-            'resident_list': resident_list
+            'resident_list': page_obj
         })
 
     def post(self, request):

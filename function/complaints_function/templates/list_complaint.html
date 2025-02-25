@@ -1,0 +1,106 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+
+  
+       
+  <div class="body_div">
+            
+  <div class="header-container">            
+      <h2 class="mb-4">Complain List</h2>
+  
+                  <!-- Button trigger modal -->
+                  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                    Register Resident
+                  </button>
+      </div>
+                  
+                <div class="container">
+                <table class="table table-striped table-bordered">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th>Complain ID</th>
+                            <th>Resident ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Complain Date</th>
+                            <th>Description</th>
+                            <th>Status</th>
+                  
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in complaint_list %}
+                        <tr>
+                            <td>{{ item.complaint_id }}</td>
+                            <td>{{ item.resident__resident_id }}</td> <!--- fix this later -->
+                            <td>{{ item.resident__first_name }} </td> 
+                            <td>{{ item.resident__last_name }}  </td>
+                            
+                            <td>{{ item.complaint_date }}</td>
+                            <td>{{ item.description }}</td>
+
+                            
+
+                            <td>
+                                {% if item.status == 'Pending' %}
+                                    <span style="color:red">{{item.status}}</span>
+                                {% elif item.status == 'Resolved' %}
+                                    <span style="color:green">{{item.status}}</span>
+                                {% elif item.status == 'In Progress' %}
+                                    <span style="color:orange">{{item.status}}</span>
+                                {% else %}
+                                    {{ item.status }}
+                                {% endif %}
+                            </td>
+
+                        </tr>    
+                        {% endfor %}
+                    </tbody>
+                </table>
+              </div>
+              
+          <div class="pagination_div">
+            
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                {% if resident_list.has_previous %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page=1" tabindex="-1">&laquo;first</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ resident_list.previous_page_number }}" tabindex="-1">Previous</a>
+                  </li>
+                {% endif %}
+            
+                <li class="page-item disabled">
+                  <a class="page-link" href="#">
+                    Page {{ resident_list.number }} of {{ resident_list.paginator.num_pages }}.
+                  </a>
+                </li>
+            
+                {% if resident_list.has_next %}
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ resident_list.next_page_number }}">Next</a>
+                  </li>
+                  <li class="page-item">
+                    <a class="page-link" href="?page={{ resident_list.paginator.num_pages }}">&laquo;last</a>
+                  </li>
+                {% endif %}
+              </ul>
+            </nav>
+            
+  
+  
+            </div>
+  
+      </div>
+  
+  </div>
+{% endblock %}
