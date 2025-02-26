@@ -33,7 +33,7 @@ class ResidentCreateView(View):
     def get(self, request):
         form = self.form_class()
         resident_list = Residents_model.objects.all()
-        paginator = Paginator(resident_list,5)
+        paginator = Paginator(resident_list,12)
         
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
