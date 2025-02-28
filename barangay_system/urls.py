@@ -10,7 +10,8 @@ urlpatterns = [
     path('',include('function.resident_function.urls')),
     path('',include('function.services_function.urls')),
     path('',include('function.dashboard_function.urls')),
-    path('',include('function.complaints_function.urls'))
+    path('',include('function.complaints_function.urls')),
+    path('',include('function.annoucement_function.urls'))
 ]
 
 if settings.DEBUG:

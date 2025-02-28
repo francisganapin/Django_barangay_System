@@ -23,7 +23,7 @@
         <h1 class="modal-title fs-5" id="staticBackdropLabel"> Register </h1>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form method="post">
+      <form method="post" action="">
         {% csrf_token %}
         {{ form|crispy }}
         <div class="modal-footer">
@@ -35,6 +35,33 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+
+<div class="modal fade" id="archive-id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel"> Register </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="" method="POST">
+        {% csrf_token %}
+        <label id="pText" for="stock">Update Details</label>
+    
+        <input id="displayInput" type="number" name="complaint_id" readonly>
+
+        <select id="archive" name="archive">
+            <option value=True>Archive</option>
+            <option value=False>Stay</option>
+        </select>
+    
+        <input type="submit" name="update_complaint" value="Update Complaint">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </form>
+    </div>
+  </div>
+</div>
+
 
 
   <div class="body_div">
@@ -56,6 +83,7 @@
                             <th>Complain Date</th>
                             <th>Description</th>
                             <th>Status</th>
+                            <th>Archive</th>
                   
                         </tr>
                     </thead>
@@ -83,7 +111,16 @@
                                     {{ item.status }}
                                 {% endif %}
                             </td>
-
+                            <td>
+                             
+                              <button class="myBtn" complaint-id="{{ item.complaint_id }}" 
+                              data-message="{{ item.resident__resident_id }} {{ item.resident__first_name }} {{ item.resident__last_name }}  
+                                            {{ item.complaint_date }} {{ item.description }}" 
+                              data-bs-toggle="modal" data-bs-target="#archive-id"
+                              onclick="handleButtonClick(this)">
+                          📦
+                      </button>
+                          </td>
                         </tr>    
                         {% endfor %}
                     </tbody>
@@ -119,12 +156,25 @@
                 {% endif %}
               </ul>
             </nav>
-            
-  
-  
             </div>
-  
       </div>
-  
   </div>
+
+
+
+  <script>
+    function handleButtonClick(button) {
+        const productId = button.getAttribute('complaint-id');  // Get complaint id
+        const message = button.getAttribute('data-message');  // Get message
+
+        // Pass ID to input
+        document.getElementById('displayInput').value = productId;
+        console.log(`Product ID set to: ${productId}`);
+
+        // Change the <label> text
+        document.getElementById('pText').textContent = message;
+        console.log(`Product message set to: ${message}`);
+    }
+</script>
+ 
 {% endblock %}

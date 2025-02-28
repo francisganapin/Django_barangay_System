@@ -13,6 +13,8 @@ class Complaints_model(models.Model):
         choices=[('Pending','pending'),('In Progress','In Progress'),('Resolved','resolved')],
         default="Pending",
     )
+    archive = models.BooleanField(default=False)
+
 
     class Meta:
         db_table = 'complaints_table'

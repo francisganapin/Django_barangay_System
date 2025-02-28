@@ -15,11 +15,6 @@ def service_class_view(request):
     return render(request,'service_list.html',{'service_list':service_list})
 
 
-
-
-
-
-
 def resident_class_view(request):
     
     resident_list = Residents_model.objects.all()
@@ -32,6 +27,8 @@ class ResidentForm(forms.ModelForm):
     class Meta:
         model = Residents_model
         fields = '__all__'
+       
+
 
 class ResidentCreateView(CreateView):
     form_class = ResidentForm

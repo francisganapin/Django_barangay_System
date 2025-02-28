@@ -17,8 +17,11 @@ class ComplaintsForm(forms.ModelForm):
                     'complaint_date':forms.DateInput(attrs={'type':'date'}),
 
                 }
-class Complaint_list_view(View):
+        
 
+          
+
+class Complaint_list_view(View):
     form_complaint = ComplaintsForm
     Pending = ''
     Resolved = ''
@@ -30,7 +33,8 @@ class Complaint_list_view(View):
         'resident__last_name',  # Include last name
         'complaint_date', 
         'description', 
-        'status'
+        'status',
+        'archive'
     )
 
 
@@ -41,9 +45,10 @@ class Complaint_list_view(View):
     def get(self,request):
         form = self.form_complaint()
         list_data = self.get_complaint_list()
+        list_data_exclude = [item for item in list_data if item['archive'] != True ]
         context = {'Pending':self.Pending,
                'Resolved':self.Resolved,
-               'complaint_list':list_data,
+               'complaint_list':list_data_exclude,
                'form':form
                }
         return render(request,self.template_name,context)
@@ -51,15 +56,34 @@ class Complaint_list_view(View):
 
     def post(self,request):
         form = self.form_complaint(request.POST)
-    
+       
+        if 'update_complaint' in request.POST:
+            complaint_id = request.POST.get('complaint_id')
+            archive_value = request.POST.get('archive')
+
+            try:
+                complaint = Complaints_model.objects.get(complaint_id=complaint_id)
+                complaint.archive = True if archive_value == 'True' else False
+
+                complaint.save()
+                return redirect('complaints')
+            except Complaints_model.DoesNotExist:
+                print('error')
+
         if form.is_valid():
             form.save()
             return redirect('complaints')
+        
         list_data = self.get_complaint_list()
+        list_data_exclude = [item for item in list_data if item['archive'] != True ]
         context = {'Pending':self.Pending,
                'Resolved':self.Resolved,
-               'complaint_list':list_data,
+               'complaint_list':list_data_exclude,
                'form':form
+               
                }
         return render(request,self.template_name,context)
 
+    #def post_update(self,request):
+
+        
