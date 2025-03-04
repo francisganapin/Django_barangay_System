@@ -7,138 +7,128 @@
 {% load crispy_forms_tags %}
 
 <style>
-    .pagination_div{
-      margin: 0 auto; /* Center the div horizontally */
-      display: flex; /* Use flexbox to center content */
-      justify-content: center; /* Center content horizontally */
-      align-items: center; /* Center content vertically */
-    }
-    .body_div{
-      max-width:1400px;
-      margin: 0 auto; /* Center the div horizontally */
-      justify-content: center; /* Center content horizontally */
-    }
-    .container {
+  .pagination_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
   
-      height: 700px;
-      overflow: auto; /* or scroll, hidden, visible */
-      border: 1px solid #000;
+  .body_div {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .container {
+    height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8f9fa;
   }
   
   thead {
-    position:sticky;
-    top:0;
-   
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
   }
   
   .header-container {
-    display: flex; 
-    justify-content: space-between; /* Places elements on opposite ends of the row */
-    align-items: center;           /* Vertically center them */
-    margin-bottom: 1rem;          /* Add spacing below if desired */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
   }
-  
-  </style>
-
+</style>
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="staticBackdropLabel"> Register </h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form method="post" action="{% url 'list_announcement_view' %}">
-          {% csrf_token %}
-          <div class="modal-body">
-            {{ form|crispy }}
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </div>
-        </form>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Register Resident</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          {{ form|crispy }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="body_div">
+  <div class="header-container">
+    <h2>Anouncement List</h2>
+    <div>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Register Anouncement
+      </button>
+      
     </div>
   </div>
 
+  <div class="container">
+    <table class="table table-striped table-hover table-bordered text-center">
+      <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Publish Date</th>
+                <th>Expiry Date</th>
+                <th>Archive</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in list %}
+            <tr>
+                <td>{{ item.id }}</td>
+                <td>{{ item.title }}</td>
+                <td>{{ item.content }}</td>
+                <td>{{ item.published_date }}</td>
+                <td>{{ item.expiry_date }}</td>
+                <td>{{ item.is_active }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+    </table>
+  </div>
 
-<div class="body_div">
-          
-    <div class="header-container">            
-        <h2 class="mb-4">Annoucement List</h2>
-    
-                    <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                      Register Annoucement
-                    </button>
-        </div>
-                    
-                  <div class="container">
-                  <table class="table table-striped table-bordered">
-                      <thead class="thead-dark">
-                          <tr>
-                              <th>ID</th>
-                              <th>Title</th>
-                              <th>Content</th>
-                              <th>Publish</th>
-                              <th>expiry_date</th>
-                              <th>Archive</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                        {% for item in list%}
-                        <tr>
-                            <td>{{item.id}}</td>
-                            <td>{{item.title}}</td>
-                            <td>{{item.content}}</td>
-                            <td>{{item.published_date}}</td>
-                            <td>{{item.expiry_date}}</td>
-                            <td>{{item.is_active}}</td>
-                        </tr>
-                        {% endfor %}
-
-
-                      </tbody>
-                  </table>
-                </div>
-                
-            <div class="pagination_div">
-              
-              <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                  {% if service_list.has_previous %}
-                    <li class="page-item">
-                      <a class="page-link" href="?page=1" tabindex="-1">&laquo;first</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="?page={{ service_list.previous_page_number }}" tabindex="-1">Previous</a>
-                    </li>
-                  {% endif %}
-              
-                  <li class="page-item disabled">
-                    <a class="page-link" href="#">
-                      Page {{ service_list.number }} of {{ service_list.paginator.num_pages }}.
-                    </a>
-                  </li>
-              
-                  {% if service_list.has_next %}
-                    <li class="page-item">
-                      <a class="page-link" href="?page={{ service_list.next_page_number }}">Next</a>
-                    </li>
-                    <li class="page-item">
-                      <a class="page-link" href="?page={{ service_list.paginator.num_pages }}">&laquo;last</a>
-                    </li>
-                  {% endif %}
-                </ul>
-              </nav>
-              
-    
-    
-              </div>
-    
-        </div>
-
+  <div class="pagination_div">
+    <nav>
+      <ul class="pagination">
+        {% if resident_list.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo; First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ resident_list.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <a class="page-link">Page {{ resident_list.number }} of {{ resident_list.paginator.num_pages }}</a>
+        </li>
+        {% if resident_list.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ resident_list.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ resident_list.paginator.num_pages }}">Last &raquo;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
 
 {% endblock %}

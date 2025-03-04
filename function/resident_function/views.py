@@ -6,8 +6,13 @@ from django.urls import reverse_lazy
 from django.views.generic import View
 from django.core.paginator import Paginator
 from django.shortcuts import render
-
+from datetime import date 
 #resident 
+
+import csv # 2/13/2025
+from django.http import HttpResponse # import this to have csv
+
+
 class ResidentForm(forms.ModelForm):
 
     class Meta:
@@ -53,3 +58,27 @@ class ResidentCreateView(View):
             'form': form,
             'resident_list': resident_list
         })
+    
+class ResidentExportView(View):
+ 
+    def post(self,request):
+        response = HttpResponse(
+            content_type="text/csv",
+            headers={"Content-Disposition": f'attachment; filename="resident_list_{date.today()}.csv"'},
+        )
+
+        writer = csv.writer(response)
+        writer.writerow([ 'resident_id','first_name','last_name','birth_date','address','contact_number','house_id','gender'])
+        resident_list = Residents_model.objects.all()
+        for resident in resident_list:
+            writer.writerow([
+                resident.resident_id,
+                resident.first_name,
+                resident.last_name,
+                resident.birth_date,
+                resident.address,
+                resident.contact_number,
+                resident.house_id, 
+                resident.gender 
+            ])   
+        return response     

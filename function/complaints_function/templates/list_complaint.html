@@ -1,4 +1,3 @@
-
 {% extends 'base.html' %}
 
 {% block title %}Home{% endblock %}
@@ -7,62 +6,50 @@
 
 {% load crispy_forms_tags %}
 
-
-
-
 <style>
-  .pagination_div{
-    margin: 0 auto; /* Center the div horizontally */
-    display: flex; /* Use flexbox to center content */
-    justify-content: center; /* Center content horizontally */
-    align-items: center; /* Center content vertically */
+  .pagination_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
   }
-  .body_div{
-    max-width:1400px;
-    margin: 0 auto; /* Center the div horizontally */
-    justify-content: center; /* Center content horizontally */
+  
+  .body_div {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
   }
+  
   .container {
-
-    height: 700px;
-    overflow: auto; /* or scroll, hidden, visible */
-    border: 1px solid #000;
-}
-
-thead {
-  position:sticky;
-  top:0;
- 
-}
-
-.header-container {
-  display: flex; 
-  justify-content: space-between; /* Places elements on opposite ends of the row */
-  align-items: center;           /* Vertically center them */
-  margin-bottom: 1rem;          /* Add spacing below if desired */
-}
-
+    height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+  }
+  
+  thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
 </style>
-
-
-
-
-
-
-
-
-
-
-
-<!-- Modal -->
-<!-- Modal -->
 
 <!-- Modal -->
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel"> Register </h1>
+        <h5 class="modal-title" id="staticBackdropLabel">Register Complaint</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form method="post">
@@ -79,81 +66,39 @@ thead {
   </div>
 </div>
 
-<!-- Modal -->
-
-<!-- Archive Modal -->
-<div class="modal fade" id="archive-id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="archiveModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-4 shadow-lg">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="archiveModalLabel">Update Complaint</h5>
-        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="" method="POST">
-        {% csrf_token %}
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="displayInput" class="form-label">Complaint ID</label>
-            <input type="number" class="form-control" id="displayInput" name="complaint_id" readonly>
-          </div>
-          <div class="mb-3">
-            <label for="archive" class="form-label">Update Details</label>
-            <select class="form-select" id="archive" name="archive">
-              <option value="True">Archive</option>
-              <option value="False">Stay</option>
-            </select>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary" name="update_complaint">Update Complaint</button>
-        </div>
-      </form>
+<div class="body_div">
+  <div class="header-container">
+    <h2>Complaint List</h2>
+    <div>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Complaint Register
+      </button>
     </div>
   </div>
-</div>
 
-
-
-     
-<div class="body_div">
-          
-<div class="header-container">            
-    <h2 class="mb-4">Complaint List</h2>
-
-  <!-- Button trigger modal -->
-  <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-    Register Complaint
-  </button>
-    </div>
-                
-              <div class="container">
-              <table class="table table-striped table-bordered">
-                  <thead class="thead-dark">
-                      <tr>
-                        <th>Complain ID</th>
-                        <th>Resident ID</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Complain Date</th>
-                        <th>Description</th>
-                        <th>Status</th>
-                        <th>Archive</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                    {% for item in complaint_list %}
+  <div class="container">
+    <table class="table table-striped table-hover table-bordered text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Resident ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Complaint Date</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Archive</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in complaint_list %}
                     <tr>
                         <td>{{ item.complaint_id }}</td>
                         <td>{{ item.resident__resident_id }}</td> <!--- fix this later -->
                         <td>{{ item.resident__first_name }} </td> 
                         <td>{{ item.resident__last_name }}  </td>
-                        
                         <td>{{ item.complaint_date }}</td>
                         <td>{{ item.description }}</td>
-
-                        
 
                         <td>
                             {% if item.status == 'Pending' %}
@@ -178,46 +123,35 @@ thead {
                       </td>
                     </tr>    
                     {% endfor %}
-                </tbody>
-              </table>
-            </div>
-            
-        <div class="pagination_div">
-          
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-              {% if resident_list.has_previous %}
-                <li class="page-item">
-                  <a class="page-link" href="?page=1" tabindex="-1">&laquo;first</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="?page={{ resident_list.previous_page_number }}" tabindex="-1">Previous</a>
-                </li>
-              {% endif %}
-          
-              <li class="page-item disabled">
-                <a class="page-link" href="#">
-                  Page {{ resident_list.number }} of {{ resident_list.paginator.num_pages }}.
-                </a>
-              </li>
-          
-              {% if resident_list.has_next %}
-                <li class="page-item">
-                  <a class="page-link" href="?page={{ resident_list.next_page_number }}">Next</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" href="?page={{ resident_list.paginator.num_pages }}">&laquo;last</a>
-                </li>
-              {% endif %}
-            </ul>
-          </nav>
-          
+      </tbody>
+    </table>
+  </div>
 
-
-          </div>
-
-    </div>
-
+  <div class="pagination_div">
+    <nav>
+      <ul class="pagination">
+        {% if complaint_list.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo; First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ complaint_list.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <a class="page-link">Page {{ complaint_list.number }} of {{ complaint_list.paginator.num_pages }}</a>
+        </li>
+        {% if complaint_list.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ complaint_list.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ complaint_list.paginator.num_pages }}">Last &raquo;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
 </div>
 
 <script>
@@ -235,6 +169,4 @@ thead {
   }
 </script>
 
-
-    
 {% endblock %}
