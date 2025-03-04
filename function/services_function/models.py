@@ -2,7 +2,6 @@ from django.db import models
 from function.resident_function.models import Residents_model
 
 class Service_model(models.Model):
-    service_id = models.AutoField(primary_key=True)# auto increment id
     service_name = models.CharField(max_length=50)
     description = models.TextField(max_length=150)
     fee = models.DecimalField(max_digits=6,decimal_places=2)

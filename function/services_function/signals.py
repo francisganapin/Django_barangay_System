@@ -11,19 +11,17 @@ def create_default_resident(sender, **kwargs):
 
     service_sample =  [
             {
-                "service_id": 1,
+ 
                 "service_name": "Consultation",
                 "description": "An in-depth consultation session.",
                 "fee": 100.00
             },
             {
-                "service_id": 2,
                 "service_name": "Therapy Session",
                 "description": "A one-hour therapy session.",
                 "fee": 150.00
             },
             {
-                "service_id": 3,
                 "service_name": "Follow-up",
                 "description": "A follow-up session to monitor progress.",
                 "fee": 75.00
@@ -34,9 +32,8 @@ def create_default_resident(sender, **kwargs):
 
     for data_service in service_sample:
         Service_model.objects.get_or_create(
-            service_id=data_service['service_id'],
+            service_name=data_service['service_name'],
             defaults={
-                'service_name':data_service['service_name'],
                 'description':data_service['description'],
                 'fee':data_service['fee'], 
             }

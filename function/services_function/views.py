@@ -1,36 +1,50 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django import  forms
-from .models import *
+from .models import Service_model
 from django.urls import reverse_lazy
 # Create your views here.
-from django.views.generic import CreateView
+from django.views.generic import View
+from django.shortcuts import render, get_object_or_404
+from django import  forms
 
 
-
-
-def service_class_view(request):
-
-    service_list = Service_model.objects.all()
-
-    return render(request,'service_list.html',{'service_list':service_list})
-
-
-def resident_class_view(request):
-    
-    resident_list = Residents_model.objects.all()
-
-    return render(request,'resident_list.html',{'resident_list':resident_list})
-
-
-#resident 
-class ResidentForm(forms.ModelForm):
+class ServicesForm(forms.ModelForm):
     class Meta:
-        model = Residents_model
-        fields = '__all__'
+        model = Service_model
+        fields = 'service_name','description','fee'
+
+
+
+
+class ServicesView(View):
+    template_name ='service_list.html'
+    form_service = ServicesForm
+
+    
+    def service_class_view(self):
+        service_list = Service_model.objects.all()
+        return service_list
+
+    def get(self,request):
+        service_list = self.service_class_view()
+        print(service_list)
+        form = self.form_service()
+        return render(request,self.template_name,{'service_list':service_list,'form':form})
+
+    def post(self,request):
+        form = self.form_service(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('service_list')
+        service_list = self.service_class_view()
+        return render(request,self.template_name,{'service_list':service_list,'form':form})
        
+        
+class ServicesDeleteView(View):
+    
+    def post(self,request,pk,*args,**kwargs):
+        service_list_instance =  get_object_or_404(Service_model,pk=pk)
+        service_list_instance.delete()
+        return redirect('service_list')
 
 
-class ResidentCreateView(CreateView):
-    form_class = ResidentForm
-    template_name ='resident_form.html'
-    success_url = reverse_lazy('resident_class_view')

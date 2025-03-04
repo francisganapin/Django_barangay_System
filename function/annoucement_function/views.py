@@ -7,7 +7,7 @@ from django import  forms
 
 def show_announcement_view(request):
     # Get all data of announcement
-    data = list(Announcement_model.objects.values('title',
+    data = list(Announcement_model.objects.values('id','title',
                                                    'content',
                                                    'published_date',
                                                    'expiry_date',
