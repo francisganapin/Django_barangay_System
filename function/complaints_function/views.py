@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import  Complaints_model
 
 from django.http import JsonResponse
@@ -57,19 +57,6 @@ class Complaint_list_view(View):
     def post(self,request):
         form = self.form_complaint(request.POST)
        
-        if 'update_complaint' in request.POST:
-            complaint_id = request.POST.get('complaint_id')
-            archive_value = request.POST.get('archive')
-
-            try:
-                complaint = Complaints_model.objects.get(complaint_id=complaint_id)
-                complaint.archive = True if archive_value == 'True' else False
-
-                complaint.save()
-                return redirect('complaints')
-            except Complaints_model.DoesNotExist:
-                print('error')
-
         if form.is_valid():
             form.save()
             return redirect('complaints')
@@ -87,3 +74,28 @@ class Complaint_list_view(View):
     #def post_update(self,request):
 
         
+
+
+def archive_status_complaint(request,pk):
+
+
+    complaint_list_instance =  get_object_or_404(Complaints_model,pk=pk)
+    complaint_list_instance.archive = True
+    complaint_list_instance.save()
+    return redirect('complaints')
+
+
+#i will update this later so it would work later thanks
+#def update_status_complaint(request,pk):
+
+    #if 'update_complaint_status' in request.POST:
+        #complaint_id_2 = request.POST.get('complaint_id')
+        #complaint_status = request.POST.get('status')
+
+        #try:
+            #complaint_status = Complaints_model.objects.get(complaint_id=complaint_id_2)
+            #complaint.status = complaint_status
+            #complaint.save()
+            #return redirect('complaints')
+        #except Complaints_model.DoesNotExist:
+            #print('error')

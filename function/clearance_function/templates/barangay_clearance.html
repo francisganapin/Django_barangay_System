@@ -1,0 +1,166 @@
+
+  <style>
+    /* Global Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border: 1px solid #ddd;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .header h1 {
+      font-size: 28px;
+      font-weight: 700;
+    }
+    
+    .header h2 {
+      font-size: 22px;
+      margin: 5px 0;
+    }
+    
+    .header h3 {
+      font-size: 18px;
+      margin: 5px 0;
+    }
+    
+    hr {
+      border: none;
+      border-top: 2px solid #333;
+      margin: 20px 0;
+    }
+    
+    h2 {
+      margin-bottom: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+    }
+    
+    .content {
+      font-size: 18px;
+      margin-bottom: 30px;
+    }
+    
+    .content p {
+      margin-bottom: 15px;
+    }
+    
+    .input-field {
+      border: none;
+      border-bottom: 2px solid #2c3e50;
+      font-size: 18px;
+      padding: 5px;
+      text-align: center;
+      outline: none;
+      margin: 0 5px;
+    }
+    
+    .input-field:focus {
+      border-bottom-color: #2980b9;
+    }
+    
+    .signature {
+      text-align: right;
+      margin-top: 30px;
+    }
+    
+    .signature input {
+      border: none;
+      border-bottom: 2px solid #2c3e50;
+      font-size: 18px;
+      padding: 5px;
+      text-align: center;
+      outline: none;
+      width: 250px;
+    }
+    
+    .btn-submit {
+      display: block;
+      margin: 20px auto;
+      padding: 12px 30px;
+      font-size: 18px;
+      background-color: #2980b9;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn-submit:hover {
+      background-color: #1c5980;
+    }
+  </style>
+
+
+  <form action="{% url 'generate_clearance' %}" method="POST">
+    {% csrf_token %}
+    <div class="container">
+      <div class="header">
+        <h1>Republic of the Philippines</h1>
+        <h2>Province of Metro Manila</h2>
+        <h3>Municipality of Valenzuela City</h3>
+        <h3>Barangay Gimik</h3>
+      </div>
+      <hr />
+      <h2>BARANGAY CLEARANCE</h2>
+      <div class="content">
+        <p><strong>TO WHOM IT MAY CONCERN:</strong></p>
+        <p>
+          This is to certify that 
+          <strong>
+           {{first_name}} {{last_name}}
+          </strong>, of legal age 
+          <strong>
+            {{age}}
+          </strong>, civil status 
+          <strong>
+            {{civil_status}}
+          </strong>, and a resident of 
+          <strong>
+            {{address}}
+          </strong>. This person is known to be of good moral character and a law-abiding citizen of this barangay.
+        </p>
+        <p>This certification is issued upon request for legal purposes.</p>
+        <p>
+          Issued this 
+          <strong>
+            {{date_issued}}
+          </strong> at 
+          <strong>Barangay Gimik, Valenzuela City, Metro Manila</strong>, Philippines.
+        </p>
+      </div>
+      <div class="signature">
+        <p>
+          <strong>
+            {{captain_name}}
+          </strong>
+        </p>
+        <p>Barangay Captain</p>
+      </div>
+    </div>
+
+
+
+
+

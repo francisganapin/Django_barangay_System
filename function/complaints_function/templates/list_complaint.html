@@ -112,14 +112,10 @@
                             {% endif %}
                         </td>
                         <td>
-                         
-                          <button class="myBtn" complaint-id="{{ item.complaint_id }}" 
-                          data-message="{{ item.resident__resident_id }} {{ item.resident__first_name }} {{ item.resident__last_name }}  
-                                        {{ item.complaint_date }} {{ item.description }}" 
-                          data-bs-toggle="modal" data-bs-target="#archive-id"
-                          onclick="handleButtonClick(this)">
-                      📦
-                  </button>
+                          <form action="{% url 'complaint_status_update' pk=item.complaint_id  %}" method="post">
+                          {% csrf_token %}
+                          <button type="submit">❌</button>
+                          </form>
                       </td>
                     </tr>    
                     {% endfor %}
