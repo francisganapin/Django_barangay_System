@@ -19,7 +19,8 @@ def create_default_resident(sender, **kwargs):
         "address": "123 Rizal St, Manila",
         "contact_number": "09123456789",
         "house_id": "H001",
-        "gender": "Male"
+        "gender": "Male",
+        'is_archive':False
     },
     {
         "resident_id": "RES002",
@@ -29,7 +30,8 @@ def create_default_resident(sender, **kwargs):
         "address": "456 Bonifacio Ave, Quezon City",
         "contact_number": "09234567890",
         "house_id": "H002",
-        "gender": "Female"
+        "gender": "Female",
+        'is_archive':False
     },
     {
         "resident_id": "RES003",
@@ -39,7 +41,9 @@ def create_default_resident(sender, **kwargs):
         "address": "789 Mabini St, Pasig",
         "contact_number": "09345678901",
         "house_id": "H003",
-        "gender": "Male"
+        "gender": "Male",
+        'is_archive':False
+
     },
     {
         "resident_id": "RES004",
@@ -49,7 +53,9 @@ def create_default_resident(sender, **kwargs):
         "address": "101 Luna St, Makati",
         "contact_number": "09456789012",
         "house_id": "H004",
-        "gender": "Female"
+        "gender": "Female",
+        'is_archive':False
+
     },
     {
         "resident_id": "RES005",
@@ -59,7 +65,9 @@ def create_default_resident(sender, **kwargs):
         "address": "202 Katipunan Rd, Marikina",
         "contact_number": "09567890123",
         "house_id": "H005",
-        "gender": "Male"
+        "gender": "Male",
+        'is_archive':False
+
     }
 ]
 
@@ -74,7 +82,8 @@ def create_default_resident(sender, **kwargs):
                 'address':data_resident['address'],
                 'contact_number':data_resident['contact_number'],
                 'house_id':data_resident['house_id'],
-                'gender':data_resident['gender']
+                'gender':data_resident['gender'],
+                'is_archive':data_resident['is_archive']
 
             }
         )

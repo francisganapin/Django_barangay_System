@@ -9,6 +9,7 @@ class Residents_model(models.Model):
     contact_number = models.CharField(max_length=12)
     house_id = models.CharField(max_length=12)
     gender = models.CharField(max_length=12)
+    is_archive = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'resident_table'

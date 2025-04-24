@@ -28,16 +28,46 @@ class ResidentForm(forms.ModelForm):
             'gender':forms.Select(choices=GEN_CHOICES),
         }
 
+    def clean_resident_id(self):
+        resident_id = self.cleaned_data.get('resident_id')
+        if Residents_model.objects.filter(resident_id=resident_id).exists():
+            raise forms.ValidationError('This id is already exist')
+        return resident_id
+
 class ResidentCreateView(View):
     form_class = ResidentForm
     template_name = 'resident_list.html'
     success_url = reverse_lazy('resident_list')
 
-    
 
+    def get_resident_list(self,request):
+        resident_list = Residents_model.objects.all()
+
+        if request.method == 'POST':
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            resident_id = request.POST.get('resident_id')
+            gender = request.POST.get('gender')
+            house_id = request.POST.get('house_id')
+
+            if first_name:
+                resident_list = resident_list.filter(status__icontains=first_name)
+            if last_name:
+                resident_list = resident_list.filter(last_name__icontains=last_name)
+            if resident_id:
+                resident_list = resident_list.filter(resident_id__icontains=resident_id)
+            if gender:
+                resident_list = resident_list.filter(gender__iexact=gender)
+            if house_id:
+                resident_list = resident_list.filter(house_id__icontains=house_id)
+
+        data = resident_list.values('resident_id','first_name','last_name','birth_date',
+                                    'address','contact_number','house_id','gender')
+        return data
+    
     def get(self, request):
         form = self.form_class()
-        resident_list = Residents_model.objects.all()
+        resident_list = self.get_resident_list(request)
         paginator = Paginator(resident_list,12)
         
         page_number = request.GET.get('page')
@@ -53,7 +83,7 @@ class ResidentCreateView(View):
         if form.is_valid():
             form.save()
             return redirect(self.success_url)
-        resident_list = Residents_model.objects.all()
+        resident_list = self.get_resident_list(request)
         return render(request, self.template_name, {
             'form': form,
             'resident_list': resident_list

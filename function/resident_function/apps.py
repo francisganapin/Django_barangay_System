@@ -5,4 +5,4 @@ class ResidentFunctionConfig(AppConfig):
     name = "function.resident_function"  # Make sure this matches your app name
 
     def ready(self):
-        import function.resident_function.signals  # Ensure correct import
+        import  function.resident_function.signals  # Ensure correct import

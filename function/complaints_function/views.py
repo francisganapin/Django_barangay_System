@@ -19,32 +19,50 @@ class ComplaintsForm(forms.ModelForm):
                 }
         
 
-          
 
 class Complaint_list_view(View):
     form_complaint = ComplaintsForm
     Pending = ''
     Resolved = ''
-    def get_complaint_list(self):
-        return  Complaints_model.objects.select_related('resident').values(
-        'complaint_id', 
-        'resident__resident_id',  # ForeignKey ID
-        'resident__first_name',  # Include first name
-        'resident__last_name',  # Include last name
-        'complaint_date', 
-        'description', 
-        'status',
-        'archive'
-    )
 
+    def get_complaint_list(self,request):
+        #get the list
+        complaints = Complaints_model.objects.select_related('resident')
+        if request.method == 'POST':
+            status = request.POST.get('status')
+            first_name = request.POST.get('first_name')
+            last_name = request.POST.get('last_name')
+            resident_id = request.POST.get('resident_id')
+            
 
+            if status:
+                complaints = complaints.filter(status__icontains=status)
+            if first_name:
+                complaints = complaints.filter(resident__first_name__icontains=first_name)
+            if last_name: 
+                complaints = complaints.filter(resident__last_name__icontains=last_name)
+            if resident_id:
+                complaints = complaints.filter(resident__resident_id=resident_id)
+        
+        data = complaints.values(
+            'complaint_id',
+            'resident__resident_id',
+            'resident__first_name',
+            'resident__last_name',
+            'complaint_date',
+            'description',
+            'status',
+            'archive'
+        )
+        return data
+    
     template_name = 'list_complaint.html'
     print(get_complaint_list)
 
 
     def get(self,request):
         form = self.form_complaint()
-        list_data = self.get_complaint_list()
+        list_data = self.get_complaint_list(request)
         list_data_exclude = [item for item in list_data if item['archive'] != True ]
         context = {'Pending':self.Pending,
                'Resolved':self.Resolved,
@@ -61,7 +79,7 @@ class Complaint_list_view(View):
             form.save()
             return redirect('complaints')
         
-        list_data = self.get_complaint_list()
+        list_data = self.get_complaint_list(request)
         list_data_exclude = [item for item in list_data if item['archive'] != True ]
         context = {'Pending':self.Pending,
                'Resolved':self.Resolved,
@@ -83,6 +101,9 @@ def archive_status_complaint(request,pk):
     complaint_list_instance.archive = True
     complaint_list_instance.save()
     return redirect('complaints')
+
+
+from django.http import JsonResponse
 
 
 #i will update this later so it would work later thanks

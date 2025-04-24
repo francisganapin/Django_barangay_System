@@ -1,0 +1,4 @@
+we have problem at django.core.exceptions.FieldError: Cannot resolve keyword 'status' into field. Choices are: address, birth_date, complaints_model, 
+contact_number, first_name, gender, house_id, id, is_archive, last_name, permit_mode, resident_id, residentserviceavail
+
+we wwil lfix this later

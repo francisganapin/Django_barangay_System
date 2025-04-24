@@ -44,8 +44,55 @@
   }
 </style>
 
+
+<!-- Modal for search resident -->
+<div class="modal fade" id="SearchResident" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="staticBackdropLabel">Register Complaint</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="resident_id" class="form-label">Resident ID</label>
+            <input type="text" class="form-control" name="resident_id" id="resident_id">
+          </div>
+          <div class="mb-3">
+            <label for="first_name" class="form-label">First Name</label>
+            <input type="text" class="form-control" name="first_name" id="first_name">
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">Last Name</label>
+            <input type="text" class="form-control" name="last_name" id="last_name">
+          </div>
+          <div class="mb-3">
+            <label for="last_name" class="form-label">House ID</label>
+            <input type="text" class="form-control" name="house_id" id="house_id">
+          </div>
+          <div class="mb-3">
+            <label for="status" class="form-label">Gender</label>
+            <select class="form-select" name="gender" id="gender">
+              <option value="">All</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
 <!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" id="RegisterResident" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -70,7 +117,10 @@
   <div class="header-container">
     <h2>Resident List</h2>
     <div>
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#SearchResident">
+        Register Resident
+      </button>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#RegisterResident">
         Register Resident
       </button>
       <form method="post" action="{% url 'resident_list_export' %}" class="d-inline">
