@@ -23,6 +23,7 @@ class ResidentForm(forms.ModelForm):
         ('Other', 'Other'),
     ]
         fields = '__all__'
+        exclude = 'is_archive',
         widgets = {
             'birth_date':forms.DateInput(attrs={'type':'date'}),
             'gender':forms.Select(choices=GEN_CHOICES),
@@ -30,6 +31,11 @@ class ResidentForm(forms.ModelForm):
 
     def clean_resident_id(self):
         resident_id = self.cleaned_data.get('resident_id')
+
+        # add this to check if resident id was not 7 characterd 
+        if len(resident_id) != 8:
+            raise forms.ValidationError('Make input 7 character') 
+
         if Residents_model.objects.filter(resident_id=resident_id).exists():
             raise forms.ValidationError('This id is already exist')
         return resident_id
@@ -51,7 +57,7 @@ class ResidentCreateView(View):
             house_id = request.POST.get('house_id')
 
             if first_name:
-                resident_list = resident_list.filter(status__icontains=first_name)
+                resident_list = resident_list.filter(first_name__icontains=first_name)
             if last_name:
                 resident_list = resident_list.filter(last_name__icontains=last_name)
             if resident_id:
