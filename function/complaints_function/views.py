@@ -8,6 +8,8 @@ from django.views.generic import View
 from .models import Complaints_model
 from django import  forms
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class ComplaintsForm(forms.ModelForm):
     class Meta:
@@ -19,7 +21,7 @@ class ComplaintsForm(forms.ModelForm):
                 }
         
 
-
+@method_decorator(login_required, name='dispatch')
 class Complaint_list_view(View):
     form_complaint = ComplaintsForm
     Pending = ''
@@ -93,7 +95,7 @@ class Complaint_list_view(View):
 
         
 
-
+@method_decorator(login_required, name='dispatch')
 def archive_status_complaint(request,pk):
 
 

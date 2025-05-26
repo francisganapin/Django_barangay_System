@@ -12,6 +12,9 @@ from datetime import date
 import csv # 2/13/2025
 from django.http import HttpResponse # import this to have csv
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 
 class ResidentForm(forms.ModelForm):
 
@@ -34,12 +37,15 @@ class ResidentForm(forms.ModelForm):
 
         # add this to check if resident id was not 7 characterd 
         if len(resident_id) != 8:
-            raise forms.ValidationError('Make input 7 character') 
+            raise forms.ValidationError('Make input 9 character') 
 
         if Residents_model.objects.filter(resident_id=resident_id).exists():
             raise forms.ValidationError('This id is already exist')
         return resident_id
 
+
+
+@method_decorator(login_required, name='dispatch')
 class ResidentCreateView(View):
     form_class = ResidentForm
     template_name = 'resident_list.html'
@@ -95,6 +101,8 @@ class ResidentCreateView(View):
             'resident_list': resident_list
         })
     
+
+@method_decorator(login_required, name='dispatch')
 class ResidentExportView(View):
  
     def post(self,request):

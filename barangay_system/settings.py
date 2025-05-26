@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'function.dashboard_function',
     'function.annoucement_function',
     'function.clearance_function',
+    'function.login_function',
     'bootstrapform',
     'crispy_forms',
     'crispy_bootstrap4',

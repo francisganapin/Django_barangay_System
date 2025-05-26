@@ -3,10 +3,13 @@ from django.views import View
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from weasyprint import HTML
-import io
+
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 import datetime
 
+@method_decorator(login_required, name='dispatch')
 class ClearanceMaker(View):
     template_name = 'barangay_form.html'
     pdf_template = 'barangay_clearance.html'

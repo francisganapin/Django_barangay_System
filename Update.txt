@@ -1,3 +1,6 @@
+5/26/2025
+    add loin authentication for our ddjango
+
 5/11/2025
 	update resident ui and clearance
 	

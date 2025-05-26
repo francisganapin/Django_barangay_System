@@ -5,8 +5,9 @@ from django.urls import reverse_lazy
 # Create your views here.
 from django.views.generic import View
 from django.shortcuts import render, get_object_or_404
-from django import  forms
 
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 
 class ServicesForm(forms.ModelForm):
     class Meta:
@@ -14,8 +15,7 @@ class ServicesForm(forms.ModelForm):
         fields = 'service_name','description','fee'
 
 
-
-
+@method_decorator(login_required, name='dispatch')
 class ServicesView(View):
     template_name ='service_list.html'
     form_service = ServicesForm
@@ -39,7 +39,8 @@ class ServicesView(View):
         service_list = self.service_class_view()
         return render(request,self.template_name,{'service_list':service_list,'form':form})
        
-        
+
+@method_decorator(login_required, name='dispatch')     
 class ServicesDeleteView(View):
     
     def post(self,request,pk,*args,**kwargs):
