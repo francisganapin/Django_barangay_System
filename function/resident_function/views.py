@@ -37,7 +37,7 @@ class ResidentForm(forms.ModelForm):
 
         # add this to check if resident id was not 7 characterd 
         if len(resident_id) != 8:
-            raise forms.ValidationError('Make input 9 character') 
+            raise forms.ValidationError('Make input 8 character') 
 
         if Residents_model.objects.filter(resident_id=resident_id).exists():
             raise forms.ValidationError('This id is already exist')
