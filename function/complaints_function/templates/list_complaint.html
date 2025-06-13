@@ -42,6 +42,12 @@
     align-items: center;
     margin-bottom: 20px;
   }
+
+  @media(max-width:576px){
+
+  }
+
+
 </style>
 
 
@@ -114,13 +120,19 @@
     <h2>Complaint List</h2>
     <div>
 
+  <div class="button_flex">
+    <div class="button">
       <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#SearchComplaint">
         Complaint Search
       </button>
+    </div>
 
+    <div class="button">
       <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
         Complaint Register
       </button>
+    </div>
+  </div>
 
     </div>
   </div>
