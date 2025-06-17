@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    
+    'function.admin_function',
     'function.resident_function',
     'function.complaints_function',
     'function.services_function',
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'function.clearance_function',
     'function.login_function',
     'function.homepage_function',
+
     'bootstrapform',
     'crispy_forms',
     'crispy_bootstrap4',
@@ -136,3 +139,13 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+#this is our function model  custom auth_user
+AUTH_USER_MODEL = 'admin_function.AdminUser'
+
+
+# Define the base URL for serving media files
+MEDIA_URL = '/media/'
+
+# Specify the directory where media files are stored
+MEDIA_ROOT = BASE_DIR / 'media'

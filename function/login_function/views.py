@@ -9,12 +9,12 @@ def login_view(request):
         username = request.POST['username']
         password = request.POST['password']
 
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=username, password=password)
 
         if user is not None:
             print('User authenticated succesffuly')
             login(request,user)
-            return redirect('resident_list')
+            return redirect('homepage')
         else:  
             # if user was failed
             print('Authentication Failed!')    
