@@ -7,6 +7,12 @@
 {% load crispy_forms_tags %}
 
 <style>
+
+    body {
+       background-color: 	#b6a897;
+       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     }
+     
   .pagination_div {
     display: flex;
     justify-content: center;
@@ -43,9 +49,20 @@
     margin-bottom: 20px;
   }
 
-  @media(max-width:576px){
+  .button_flex {
+      flex-direction: row;
+    }
+ 
 
+   /* Responsive adjustments */
+   @media (max-width: 768px) {
+
+    .button_flex {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
   }
+    }
 
 
 </style>
@@ -115,24 +132,31 @@
   </div>
 </div>
 
+
+
+
+
+
 <div class="body_div">
+
   <div class="header-container">
-    <h2>Complaint List</h2>
-    <div>
+    <h2>Resident List</h2>
 
-  <div class="button_flex">
-    <div class="button">
+    <div class="button_flex">
+
+
       <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#SearchComplaint">
-        Complaint Search
+        Search Resident
       </button>
+
+
+
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Register Resident
+      </button>
+
     </div>
 
-    <div class="button">
-      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-        Complaint Register
-      </button>
-    </div>
-  </div>
 
     </div>
   </div>
