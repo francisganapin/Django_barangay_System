@@ -149,3 +149,6 @@ MEDIA_URL = '/media/'
 
 # Specify the directory where media files are stored
 MEDIA_ROOT = BASE_DIR / 'media'
+
+
+LOGOUT_REDIRECT_URL = '/'
