@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<style>
+
+    body {
+       background-color: 	#b6a897;
+       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+     }
+     
+  .pagination_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .body_div {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+  
+  .container {
+    height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+  }
+  
+  thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+  
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  .button_flex {
+      flex-direction: row;
+    }
+ 
+
+   /* Responsive adjustments */
+   @media (max-width: 768px) {
+
+    .button_flex {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+  }
+    }
+
+
+</style>
+
+
+
+
+ 
+<div class="modal fade" id="SearchComplaint" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="staticBackdropLabel">Search</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="resident_id" class="form-label">name</label>
+            <input type="text" class="form-control" name="name" id="name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add Medecine</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          {{ form|crispy }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<div class="body_div">
+
+  <div class="header-container">
+    <h2>Medecine Stock</h2>
+
+    <div class="button_flex">
+
+
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#SearchComplaint">
+        Search Resident
+      </button>
+
+
+
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Add Medecine
+      </button>
+
+    </div>
+
+
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="table table-striped table-hover table-bordered text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>NAME</th>
+          <th>Expiry</th>
+          <th>Details</th>
+          <th>Stock</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in medecine_list %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.name }}</td> <!--- fix this later -->
+                        <td>{{ item.expiry_date }} </td> 
+                        <td>{{ item.remark }}  </td>
+                        <td>{{ item.stock }}  </td>
+
+                       <!---   <td>
+                            {% if item.remark == 'Pending' %}
+                                <span style="color:red">{{item.remark}}</span>
+                            {% elif item.remark == 'Resolved' %}
+                                <span style="color:green">{{item.remark}}</span>
+                            {% elif item.remark == 'In Progress' %}
+                                <span style="color:orange">{{item.remark}}</span>
+                            {% else %}
+                                {{ item.remark }}
+                            {% endif %}
+                        </td>
+                         --->
+                    </tr>    
+                    {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
+
+
+
+  <div class="pagination_div">
+    <nav>
+      <ul class="pagination">
+        {% if medecine_list.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo; First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ medecine_list.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <a class="page-link">Page {{ medecine_list.number }} of {{ medecine_list.paginator.num_pages }}</a>
+        </li>
+        {% if medecine_list.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ medecine_list.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ medecine_list.paginator.num_pages }}">Last &raquo;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+
+
+<script>
+  function handleButtonClick(button) {
+      const productId = button.getAttribute('complaint-id');  // Get complaint id
+      const message = button.getAttribute('data-message');  // Get message
+
+      // Pass ID to input
+      document.getElementById('displayInput').value = productId;
+      console.log(`Product ID set to: ${productId}`);
+
+      // Change the <label> text
+      document.getElementById('pText').textContent = message;
+      console.log(`Product message set to: ${message}`);
+  }
+</script> 
+
+{% endblock %}

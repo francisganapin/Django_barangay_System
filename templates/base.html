@@ -144,14 +144,38 @@
       <li class="nav-item mb-2">
         <a class="nav-link fw-semibold" href="{% url 'complaints' %}">📣 Complaints</a>
       </li>
+
       <li class="nav-item mb-2">
         <a class="nav-link fw-semibold" href="{% url 'list_announcement_view' %}">📢 Announcements</a>
       </li>
+
+      <!--- special -->
+        <li class="nav-item mb-2">
+   
+
+          <button class="nav-link fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
+            🏥  Health
+          </button>
+
+          <ul class="dropdown-menu dropdown-menu-dark">
+            <li><a class="dropdown-item" href="#">Appointment</a></li>
+            <li><a class="dropdown-item" href="{% url 'list_medecine_view' %}">Stock</a></li>
+            <li><a class="dropdown-item" href="#">Medical Assistance Permit</a></li>
+          </ul>
+      
+
+       
+        </li>
+
       <li class="nav-item">
         <a class="nav-link fw-semibold" href="{% url 'clearance_form' %}">📄 Clearance</a>
       </li>
+      
       <li class="nav-item">
-        <a class="nav-link fw-semibold" href="{% url 'logout' %}">👋 Logout</a>
+        <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <a><button class="btn btn-link nav-link fw-semibold" type="submit">👋 Logout</button></a>
+        </form>
       </li>
 
     </ul>

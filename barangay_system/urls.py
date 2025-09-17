@@ -16,7 +16,8 @@ urlpatterns = [
     path('',include('function.complaints_function.urls')),
     path('',include('function.annoucement_function.urls')),
     path('',include('function.clearance_function.urls')),
-    path('',include('function.homepage_function.urls'))
+    path('',include('function.homepage_function.urls')),
+    path('',include('function.medical_function.urls'))
 ]
 
 if settings.DEBUG:

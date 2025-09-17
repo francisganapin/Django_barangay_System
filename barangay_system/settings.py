@@ -47,6 +47,10 @@ INSTALLED_APPS = [
     'function.clearance_function',
     'function.login_function',
     'function.homepage_function',
+    'function.medical_function',
+ 
+
+
 
     'bootstrapform',
     'crispy_forms',
@@ -63,6 +67,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    
 ]
 
 ROOT_URLCONF = "barangay_system.urls"
