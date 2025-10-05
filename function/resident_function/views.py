@@ -96,9 +96,17 @@ class ResidentCreateView(View):
             form.save()
             return redirect(self.success_url)
         resident_list = self.get_resident_list(request)
+
+        paginator = Paginator(resident_list,12)
+        page_number = request.POST.get('page',1)
+        page_obj = paginator.get_page(page_number)
+
+
+
+
         return render(request, self.template_name, {
             'form': form,
-            'resident_list': resident_list
+            'resident_list': page_obj
         })
     
 

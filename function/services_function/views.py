@@ -9,6 +9,8 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+from django.core.paginator import Paginator
+
 class ServicesForm(forms.ModelForm):
     class Meta:
         model = Service_model
@@ -23,21 +25,33 @@ class ServicesView(View):
     
     def service_class_view(self):
         service_list = Service_model.objects.all()
+
         return service_list
 
     def get(self,request):
-        service_list = self.service_class_view()
-        print(service_list)
         form = self.form_service()
-        return render(request,self.template_name,{'service_list':service_list,'form':form})
+        service_list = self.service_class_view()
+
+        paginator = Paginator(service_list,11)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        return render(request,self.template_name,{'service_list':page_obj,'form':form})
 
     def post(self,request):
         form = self.form_service(request.POST)
         if form.is_valid():
             form.save()
             return redirect('service_list')
+        
         service_list = self.service_class_view()
-        return render(request,self.template_name,{'service_list':service_list,'form':form})
+        paginator = Paginator(service_list,11)
+        page_number = request.POST.get('page',1)
+        page_obj = paginator.get_page(page_number)
+
+
+
+        return render(request,self.template_name,{'service_list':page_obj,'form':form})
        
 
 @method_decorator(login_required, name='dispatch')     

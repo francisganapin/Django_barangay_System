@@ -84,19 +84,21 @@ class MedecineCreateView(View):
 
         medecine_list = Medicine_model.objects.all()
 
-        if request.method == 'POST':
-            name = request.POST.get('name')
-                
-            if name:
-                medecine_list  = medecine_list.filter(name__icontains=name)
+        name = request.POST.get('name')
+
+        if name:
+            medecine_list  = medecine_list.filter(name__icontains=name)
         
-        data = medecine_list.values('name','stock','expiry_date','remark')
+
+        data = medecine_list.values('id','name','stock','expiry_date','remark')
 
         return data
     
     def get(self,request):
         form = self.form_class()
         medecine_list = self.get_medecine_list(request)
+
+        
         paginator = Paginator(medecine_list,12)
 
         page_number = request.GET.get('page')
@@ -113,7 +115,12 @@ class MedecineCreateView(View):
             form.save()
             return redirect(self.success_url)
         medecine_list = self.get_medecine_list(request)
+
+        paginator = Paginator(medecine_list,12)
+        page_number = request.POST.get('page',1)
+        page_obj = paginator.get_page(page_number)
+
         return render(request,self.template_name,{
             'form':form,
-            'medecine_list':medecine_list
+            'medecine_list':page_obj
         })
