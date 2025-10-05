@@ -82,7 +82,7 @@
   </div>
 
   <div class="container">
-    <table class="table table-striped table-hover table-bordered text-center">
+    <table id="announceTable" class="table table-striped table-hover table-bordered text-center">
       <thead class="table-dark">
               <tr>
                 <th>ID</th>
@@ -94,45 +94,78 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in list %}
-            <tr>
-                <td>{{ item.id }}</td>
-                <td>{{ item.title }}</td>
-                <td>{{ item.content }}</td>
-                <td>{{ item.published_date }}</td>
-                <td>{{ item.expiry_date }}</td>
-                <td>{{ item.is_active }}</td>
-            </tr>
-            {% endfor %}
-            </tbody>
+           
+         
+
+        </tbody>
     </table>
   </div>
 
   <div class="pagination_div">
     <nav>
       <ul class="pagination">
-        {% if resident_list.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?page=1">&laquo; First</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="?page={{ resident_list.previous_page_number }}">Previous</a>
-        </li>
-        {% endif %}
+        <li><a class="page-link" id="firstBtn">&laquo; First</a></li>
+        <li><a class="page-link" id="prevBtn">Previous</a></li>
         <li class="page-item disabled">
-          <a class="page-link">Page {{ resident_list.number }} of {{ resident_list.paginator.num_pages }}</a>
+          <a class="page-link">Page <span id="current_page"></span> of <span id="total_page"></span></a>
         </li>
-        {% if resident_list.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ resident_list.next_page_number }}">Next</a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="?page={{ resident_list.paginator.num_pages }}">Last &raquo;</a>
-        </li>
-        {% endif %}
+        <li><a class="page-link" id="nextBtn">Next</a></li>
+        <li><a class="page-link" id="lastBtn">Last &raquo;</a></li>
       </ul>
-    </nav>
+      
   </div>
+
 </div>
+
+<script>
+
+  let currentPage = 1;
+  let currentSearch = ""
+
+  function loadAnnouncement(page = 1,search = ""){
+  url = `http://127.0.0.1:8000/api/annoucement/?page=${page}`
+  if (search){
+      url += `&search=${encodeURIComponent(search)}`;
+  }
+
+  fetch(url)
+  .then(response => response.json())
+  .then(data => {
+      console.log(data); // 👈 check structure
+
+      const announcements = data.results || data.announcement || [];
+
+      const tableBody = document.querySelector('#announceTable tbody');
+      tableBody.innerHTML = ''; // clear old data
+    
+      // Render Student in  loop throu data.result
+      data.announcement.forEach((item, index) => {
+      const row = document.createElement('tr');
+      
+      // Add alternating background using Tailwind
+      row.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-100';
+      
+      row.innerHTML = `
+      <td>${ item.id }</td>
+      <td>${ item.title }</td>
+      <td>${ item.content }</td>
+      <td>${ item.published_date }</td>
+      <td>${ item.expiry_date }</td>
+      <td>${ item.is_active }</td>
+      `;
+      
+      tableBody.appendChild(row);
+  });
+  
+});}
+
+
+  
+  loadAnnouncement();
+</script>
+
+
+
+
 
 {% endblock %}

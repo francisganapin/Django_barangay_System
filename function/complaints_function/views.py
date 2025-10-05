@@ -11,6 +11,10 @@ from django import  forms
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+
+from django.core.paginator import Paginator
+
+
 class ComplaintsForm(forms.ModelForm):
     class Meta:
         model = Complaints_model
@@ -66,9 +70,16 @@ class Complaint_list_view(View):
         form = self.form_complaint()
         list_data = self.get_complaint_list(request)
         list_data_exclude = [item for item in list_data if item['archive'] != True ]
+
+
+        paginator = Paginator(list_data_exclude,10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+
         context = {'Pending':self.Pending,
                'Resolved':self.Resolved,
-               'complaint_list':list_data_exclude,
+               'complaint_list':page_obj,
                'form':form
                }
         return render(request,self.template_name,context)
@@ -83,9 +94,14 @@ class Complaint_list_view(View):
         
         list_data = self.get_complaint_list(request)
         list_data_exclude = [item for item in list_data if item['archive'] != True ]
+
+        paginator = Paginator(list_data_exclude,10)
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         context = {'Pending':self.Pending,
                'Resolved':self.Resolved,
-               'complaint_list':list_data_exclude,
+               'complaint_list': page_obj,
                'form':form
                
                }

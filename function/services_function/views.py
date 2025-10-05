@@ -24,6 +24,9 @@ class ServicesView(View):
 
     
     def service_class_view(self):
+
+            
+
         service_list = Service_model.objects.all()
 
         return service_list

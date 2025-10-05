@@ -4,6 +4,12 @@ from .models import Complaints_model
 from function.resident_function.models import Residents_model
 from django.apps import apps
 
+
+#we use this for initial input on our data
+
+
+
+
 @receiver(post_migrate)
 def create_default_resident(sender, **kwargs):
     if sender.name != 'function.complaints_function':  # Ensure correct app name

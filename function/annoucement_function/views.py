@@ -5,14 +5,34 @@ from .models import Announcement_model
 import requests
 from django import  forms
 
+from django.core.paginator import Paginator
+
 def show_announcement_view(request):
     # Get all data of announcement
-    data = list(Announcement_model.objects.values('id','title',
+    announcments = Announcement_model.objects.values('id','title',
                                                    'content',
                                                    'published_date',
                                                    'expiry_date',
-                                                   'is_active'))
-    return JsonResponse(data, safe=False)
+                                                   'is_active')
+    # paginator secotr
+    page = request.GET.get('page',1)
+    per_page = request.GET.get('per_page',7)
+
+    paginator = Paginator(announcments,per_page)
+    page_obj = paginator.get_page(page)
+
+    data = list(page_obj.object_list)
+    
+    response = {
+        'total_items':paginator.count,
+        'total_page':paginator.num_pages,
+        'current_page':page_obj.number,
+        'has_next':page_obj.has_next(),
+        'has_previous':page_obj.has_previous(),
+        'announcement':data,
+    }
+
+    return JsonResponse(response, safe=False)
     
 
 
@@ -27,25 +47,4 @@ class AnnoucementForm(forms.ModelForm):
 
 
 def list_announcement_view(request):
-    #api url 
-    api_url_list = 'http://127.0.0.1:8000/annoucement/'
-
-
-    if request.method =='POST':
-        form = AnnoucementForm(request.POST)
-        if form.is_valid():
-
-            form.save()
-            return redirect('list_announcement_view')
-    else:
-        form = AnnoucementForm()
-
-    try:
-        response = requests.get(api_url_list,timeout=5)
-        response.raise_for_status()
-        
-        posts = response.json() if isinstance(response.json(),list) else []
-        print(posts)
-    except:
-        print('data was not exist')
-    return render(request,'list_announcement.html',{'list':posts,'form':form})
+    return render(request,'list_announcement.html')
