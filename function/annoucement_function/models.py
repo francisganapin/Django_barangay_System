@@ -7,5 +7,10 @@ class Announcement_model(models.Model):
     expiry_date = models.DateField()
     is_active = models.BooleanField(default=True)
 
+
+
+
     class Meta:
         db_table = 'announcement_table'
+        ordering = ['-published_date']
+

@@ -5,7 +5,7 @@ from function.resident_function.models import Residents_model
 from django.apps import apps
 
 
-#we use this for initial input on our data
+#we use this for initial input on our database 
 
 
 
