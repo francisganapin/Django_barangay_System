@@ -10,13 +10,16 @@ urlpatterns = [
 
 
     path('',include('function.login_function.urls')),
-    path('',include('function.resident_function.urls')),
-    path('',include('function.services_function.urls')),
+    path('',include('function.a1_homepage_function.urls')),
+    path('',include('function.a2_resident_function.urls')),
+    path('',include('function.a3_services_function.urls')),
+    path('',include('function.a4_complaints_function.urls')),
+    path('',include('function.a5_annoucement_function.urls')),
     path('',include('function.dashboard_function.urls')),
-    path('',include('function.complaints_function.urls')),
-    path('',include('function.annoucement_function.urls')),
+   
+
     path('',include('function.clearance_function.urls')),
-    path('',include('function.homepage_function.urls')),
+  
     path('',include('function.medical_function.urls'))
 ]
 

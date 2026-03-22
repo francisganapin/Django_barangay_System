@@ -1,0 +1,205 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<style>
+  body {
+    background-color: #b6a897;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .pagination_div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  .body_div {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+  }
+
+  .container {
+    height: 600px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    background: #f8f9fa;
+  }
+
+  thead {
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+</style>
+
+
+
+<!-- Modal for search services -->
+<div class="modal fade" id="SearchService" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content rounded-3 shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="staticBackdropLabel">Search Service</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="service_id" class="form-label">Service ID</label>
+            <input type="text" maxlength='6' class="form-control" name="service_id" id="service_id">
+          </div>
+          <div class="mb-3">
+            <label for="service_name" class="form-label">Service Name</label>
+            <input type="text" class="form-control" name="service_name" id="service_name">
+          </div>
+          <div class="mb-3">
+            <label for="fee" class="form-label">Fee</label>
+            <input type="text" class="form-control" name="fee" id="fee">
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" name="description" id="description">
+          </div>
+          <div class="mb-3">
+            <label for="status" class="form-label">Status</label>
+            <select class="form-select" name="status" id="status">
+              <option value="">All</option>
+              <option value="Pending">Pending</option>
+              <option value="Approve">Approve</option>
+              <option value="Rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+  aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Register Service</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form method="post">
+        {% csrf_token %}
+        <div class="modal-body">
+          {{ form|crispy }}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="body_div">
+  <div class="header-container">
+    <h2>Service List</h2>
+    <div>
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+        Register Service
+      </button>
+
+      <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#SearchService">
+        Search Service
+      </button>
+
+    </div>
+  </div>
+
+  <div class="container">
+    <table class="table table-striped table-hover table-bordered text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Fee</th>
+          <th>Status</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in service_list %}
+        <tr>
+          <td>{{ item.id}}</td>
+          <td>{{item.service_name}}</td>
+          <td>{{item.description}}</td>
+          <td>{{item.fee}}</td>
+          <td>{{item.status}}</td>
+          <td>
+            <form action="{% url 'service_class_delete' pk=item.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit">❌</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pagination_div">
+    <nav>
+      <ul class="pagination">
+        {% if service_list.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="?page=1">&laquo; First</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ service_list.previous_page_number }}">Previous</a>
+        </li>
+        {% endif %}
+        <li class="page-item disabled">
+          <a class="page-link">Page {{ service_list.number }} of {{ service_list.paginator.num_pages }}</a>
+        </li>
+        {% if service_list.has_next %}
+        <li class="page-item">
+          <a class="page-link" href="?page={{ service_list.next_page_number }}">Next</a>
+        </li>
+        <li class="page-item">
+          <a class="page-link" href="?page={{ service_list.paginator.num_pages }}">Last &raquo;</a>
+        </li>
+        {% endif %}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+{% endblock %}

@@ -38,15 +38,20 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     
+    'function.a1_homepage_function',
+    'function.a2_resident_function',
+    'function.a3_services_function',
+    'function.a4_complaints_function',
+    'function.a5_annoucement_function',
+    
+
     'function.admin_function',
-    'function.resident_function',
-    'function.complaints_function',
-    'function.services_function',
+
+
     'function.dashboard_function',
-    'function.annoucement_function',
     'function.clearance_function',
     'function.login_function',
-    'function.homepage_function',
+
     'function.medical_function',
  
 

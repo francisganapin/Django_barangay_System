@@ -1,5 +1,5 @@
 from django.db import models
-from function.resident_function.models import Residents_model
+from function.a2_resident_function.models import Residents_model
 
 # Create your models here.
 class Incident_models(models.Model):

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% load crispy_forms_tags %}
+
+<style>
+  body {
+    background-color: #b6a897;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .dashboard-box {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    transition: 0.3s;
+  }
+
+  .dashboard-box:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+  }
+
+  .dashboard-box .label {
+    font-size: 14px;
+    color: #888;
+    margin-bottom: 8px;
+  }
+
+  .dashboard-box .number {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .dashboard-box .sub {
+    font-size: 13px;
+    color: #999;
+  }
+
+  h2.section-title {
+    font-weight: 700;
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .bulletin-card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    transition: 0.3s;
+  }
+
+  .bulletin-card:hover {
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+</style>
+
+
+<div class="container py-4">
+
+  <!-- Dashboard Title -->
+  <h2 class="section-title">Barangay Dashboard</h2>
+
+  <!-- Dashboard Cards -->
+  <div class="row g-4 mb-5">
+
+    <div class="col-6 col-lg-3">
+      <div class="dashboard-box text-center border-start border-4 border-primary">
+        <div class="label">Residents</div>
+        <div class="number text-primary">{{ resident }}</div>
+        <div class="sub">Total Registered</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="dashboard-box text-center border-start border-4 border-success">
+        <div class="label">Services</div>
+        <div class="number text-success">{{ services }}</div>
+        <div class="sub">Active Requests</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="dashboard-box text-center border-start border-4 border-danger">
+        <div class="label">Complaints</div>
+        <div class="number text-danger">{{ complaints }}</div>
+        <div class="sub">Filed Cases</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-lg-3">
+      <div class="dashboard-box text-center border-start border-4 border-warning">
+        <div class="label">Announcements</div>
+        <div class="number text-warning">{{ announcement_count }}</div>
+        <div class="sub">Posted</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Bulletin Board Title -->
+  <h2 class="section-title">Bulletin Board</h2>
+
+  <!-- Bulletin Board Cards -->
+  <div class="row g-4">
+
+    {% for item in announcements %}
+    <div class="col-12 col-md-6 col-lg-3">
+      <div class="card h-100 shadow-sm border-0">
+
+        <div class="card-body">
+
+          {% if forloop.counter == 1 %}
+          <span class="badge bg-primary mb-2">Latest</span>
+          {% elif forloop.counter == 2 %}
+          <span class="badge bg-success mb-2">Update </span>
+          {% elif forloop.counter == 3 %}
+          <span class="badge bg-info mb-2">Info</span>
+          {% else %}
+          <span class="badge bg-secondary mb-2">Notice</span>
+          {% endif %}
+
+          <h5 class="card-title fw-bold"> {{item.title}} </h5>
+          <p class="card-text"> {{item.description}} </p>
+        </div>
+
+        <div class="card-footer bg-transparent border-top text-muted small">
+          {{item.published_date | date:"F d, Y"}}
+        </div>
+      </div>
+    </div> <!-- Added missing closing div for column -->
+
+    {% empty %}
+    <div class="col-12">
+      <div class="alert alert-info text-center">No announcements yet.</div>
+    </div>
+    {% endfor %}
+
+  </div> <!-- Closes Row -->
+</div> <!-- Closes Container -->
+
+{% endblock %}
